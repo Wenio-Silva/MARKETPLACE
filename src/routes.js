@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StyleSheet } from 'react-native';
 //Pages
-import HomeScreen from './pages/homeScreen';
+import { HomeScreen } from './pages/homeScreen';
 import SearchScreen from './pages/searchScreen';
 import FavoritesScreen from './pages/favoritesScreen';
 import HistoryScreen from './pages/historyScreen';

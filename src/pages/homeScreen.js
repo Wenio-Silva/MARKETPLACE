@@ -1,5 +1,6 @@
-import React from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableOpacity, Button } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar } from 'react-native';
+import { set } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { homeData, searchMain } from '../search';
 
@@ -11,12 +12,18 @@ const tileSize = tSize / numColumns;
 
 const barHeight = StatusBar.currentHeight;
 
-function HomeScreen({ navigation }) {
+export function HomeScreen({ navigation }) {
+    const [refreshing, setRefresh] = useState(false);
+
+    function handleRefresh() {
+        setRefresh(true);
+        setTimeout(()=>{ setRefresh(false) }, 2000);
+    }
     return (
             <View style={styles.container}>
             <View style={styles.header}>
                 <Icon.Button name="bars" style={styles.menu} size={20} color="#000" 
-                    backgroundColor="#00BFFF" onPress={() => { navigation.openDrawer(); searchMain()}}>
+                    backgroundColor="#00BFFF" onPress={() => { navigation.openDrawer() }}>
                 </Icon.Button>
                 <Text style={styles.logo}>LOGO</Text>
                 <Icon.Button name="search" style={styles.search} size={20} color="#000" 
@@ -26,7 +33,7 @@ function HomeScreen({ navigation }) {
                 <FlatList 
                     numColumns={numColumns}
                     style={styles.list}
-                    keyExtractor={(obj)=> obj.title}
+                    keyExtractor={(obj)=> obj.id}
                     data={homeData}
                     renderItem={({ item })=>(
                         <View style={styles.grup}>
@@ -36,6 +43,8 @@ function HomeScreen({ navigation }) {
                             <Text style={styles.installment}>{item.installment.trim()}</Text>
                         </View>
                     )}
+                    refreshing={refreshing}
+                    onRefresh={handleRefresh}
                 />
             </View>
         </View>
@@ -98,5 +107,3 @@ const styles = StyleSheet.create({
     },
     
   });
-
-export default HomeScreen;

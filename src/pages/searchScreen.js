@@ -1,5 +1,6 @@
-import React from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput, Button, Alert } from 'react-native';
+import React, {useState} from 'react';
+import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput } from 'react-native';
+import { State } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { searchData, handle } from '../search';
 
@@ -11,35 +12,36 @@ const tileSize = tSize / numColumns;
 
 const barHeight = StatusBar.currentHeight;
 
-const UselessTextInput = () => {
-    const [value, onChangeText] = React.useState('  Pesquisar...  ');
-  
-    return (
-      <TextInput
-        style={{ height: 20, width: 200, backgroundColor: '#FFF', borderRadius: 10 }}
-        onChangeText={text => onChangeText(text)}
-        value={value}
-      />
-    );
-  }
-  
-
 function SearchScreen({ navigation }) {
+    const [value, setValue] = useState(' ');
+    const [refreshing, setRefresh] = useState(false);
+
+    function handleRefresh() {
+        setRefresh(true);
+        console.log("true");
+        setTimeout(()=>{ setRefresh(false) }, 2000);
+        console.log("false");
+    }
+    
     return (
             <View style={styles.container}>
             <View style={styles.header}>
                 <Icon.Button name="reply" style={styles.menu} size={20} color="#000" 
                     backgroundColor="#00BFFF" onPress={() => navigation.goBack()}>
                 </Icon.Button>
-                <UselessTextInput />
+                <TextInput
+                    style={{ height: 20, width: 200, backgroundColor: '#FFF', borderRadius: 10 }}
+                    onChangeText={(value) => setValue(value)}
+                    placeholder={'  Pesquisar... '}
+                />
                 <Icon.Button name="search" style={styles.search} size={20} color="#000" 
-                    backgroundColor="#00BFFF" onPress={() => handle("camisa")}></Icon.Button>
+                    backgroundColor="#00BFFF" onPress={() => handle(value) }></Icon.Button>
             </View>
             <View style={styles.grid}>
                 <FlatList 
                     numColumns={numColumns}
                     style={styles.list}
-                    keyExtractor={(obj)=> obj.title}
+                    keyExtractor={(obj)=> obj.id}
                     data={searchData}
                     renderItem={({ item })=>(
                         <View style={styles.grup}>
@@ -49,6 +51,8 @@ function SearchScreen({ navigation }) {
                             <Text style={styles.installment}>{item.installment.trim()}</Text>
                         </View>
                     )}
+                    refreshing={refreshing}
+                    onRefresh={handleRefresh}
                 />
             </View>
         </View>

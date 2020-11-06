@@ -1,5 +1,7 @@
 import React from 'react';
 const cheerio = require('react-native-cheerio');
+import { HomeScreen } from './pages/homeScreen';
+// import SearchScreen from './pages/searchScreen';
 const baseURL = "https://www.magazinevoce.com.br/magazinesrbarato/";
 export let homeData = [], searchData = [];
 
@@ -12,15 +14,15 @@ export async function searchMain() {
     const $ = cheerio.load(htmlString);
 
     $('ol.g-items li').each((i, e) => { 
+        const id = i;
         const title = $(e).find('.g-desc > a > h3').text();
         const image = $(e).find('.g-img-wrapper > img').attr("data-original");
         const price = $(e).find('.g-desc > .g-price').text();
         const installment = $(e).find('.g-desc > .g-installment').text();
 
-        const data = {title, image, price, installment};
+        const data = {id, title, image, price, installment};
         homeData.push(data);
     });
-    console.log(homeData);
 }
 searchMain();
 // Handle the user search
@@ -41,12 +43,14 @@ async function searchSecond(URL) {
     const $ = cheerio.load(htmlString);
 
     $('ol.g-items li').each((i, e) => { 
+        const id = i;
         const title = $(e).find('.g-desc > a > h3').text();
         const image = $(e).find('.g-img-wrapper > img').attr("data-original");
         const price = $(e).find('.g-desc > .g-price').text();
         const installment = $(e).find('.g-desc > .g-installment').text();
-        const data = {title, image, price, installment};
+
+        const data = {id, title, image, price, installment};
         searchData.push(data);
-    }) 
+    })
     console.log(searchData);
 };
