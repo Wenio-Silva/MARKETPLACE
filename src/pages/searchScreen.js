@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput } from 'react-native';
 import { State } from 'react-native-gesture-handler';
+import { call } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { searchData, handle } from '../search';
 
@@ -12,17 +13,25 @@ const tileSize = tSize / numColumns;
 
 const barHeight = StatusBar.currentHeight;
 
-function SearchScreen({ navigation }) {
+export function SearchScreen({ navigation }) {
     const [value, setValue] = useState(' ');
     const [refreshing, setRefresh] = useState(false);
 
     function handleRefresh() {
-        setRefresh(true);
+        // setRefresh(true);
         console.log("true");
         setTimeout(()=>{ setRefresh(false) }, 2000);
-        console.log("false");
+        // console.log("false");
     }
-    
+
+    function wayRefresh() {
+        if(searchData.length==0){
+            setTimeout(()=>{wayRefresh()}, 500);
+        }else if(searchData.length>0){
+            handleRefresh();
+        }
+    }
+
     return (
             <View style={styles.container}>
             <View style={styles.header}>
@@ -35,7 +44,7 @@ function SearchScreen({ navigation }) {
                     placeholder={'  Pesquisar... '}
                 />
                 <Icon.Button name="search" style={styles.search} size={20} color="#000" 
-                    backgroundColor="#00BFFF" onPress={() => handle(value) }></Icon.Button>
+                    backgroundColor="#00BFFF" onPress={() => { handle(value), wayRefresh()} }></Icon.Button>
             </View>
             <View style={styles.grid}>
                 <FlatList 
@@ -115,5 +124,3 @@ const styles = StyleSheet.create({
     },
     
   });
-
-export default SearchScreen;

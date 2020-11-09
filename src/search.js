@@ -1,7 +1,7 @@
 import React from 'react';
 const cheerio = require('react-native-cheerio');
-import { HomeScreen } from './pages/homeScreen';
-// import SearchScreen from './pages/searchScreen';
+// import { HomeScreen } from './pages/homeScreen';
+// import { called } from './pages/searchScreen';
 const baseURL = "https://www.magazinevoce.com.br/magazinesrbarato/";
 export let homeData = [], searchData = [];
 
@@ -52,5 +52,4 @@ async function searchSecond(URL) {
         const data = {id, title, image, price, installment};
         searchData.push(data);
     })
-    console.log(searchData);
 };

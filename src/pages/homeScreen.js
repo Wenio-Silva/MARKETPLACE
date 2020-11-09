@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar } from 'react-native';
+import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, AppState } from 'react-native';
 import { set } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { homeData, searchMain } from '../search';
+import { homeData } from '../search';
 
 const screenWidth = Dimensions.get("window").width;
 const numColumns = 2;
@@ -19,6 +19,18 @@ export function HomeScreen({ navigation }) {
         setRefresh(true);
         setTimeout(()=>{ setRefresh(false) }, 2000);
     }
+
+    function wayRefresh() {
+        if(homeData.length==0){
+            setTimeout(()=>{wayRefresh()}, 500);
+        }else if(homeData.length>0){
+            handleRefresh();
+        }
+    }
+    if(homeData.length==0){
+        wayRefresh();
+    }
+
     return (
             <View style={styles.container}>
             <View style={styles.header}>
