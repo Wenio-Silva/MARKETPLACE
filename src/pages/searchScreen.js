@@ -18,8 +18,8 @@ export function SearchScreen({ navigation }) {
     const [refreshing, setRefresh] = useState(false);
 
     function handleRefresh() {
-        // setRefresh(true);
-        console.log("true");
+        setRefresh(true);
+        // console.log("true");
         setTimeout(()=>{ setRefresh(false) }, 2000);
         // console.log("false");
     }

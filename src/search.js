@@ -3,13 +3,14 @@ const cheerio = require('react-native-cheerio');
 // import { HomeScreen } from './pages/homeScreen';
 // import { called } from './pages/searchScreen';
 const baseURL = "https://www.magazinevoce.com.br/magazinesrbarato/";
+const error = "Verifique sua conexão com a internet e tente novamente! ;-)"
 export let homeData = [], searchData = [];
 
 export async function searchMain() { 
     //clean the array
     homeData.splice(0, homeData.length);
     //search and load the html
-    const response = await fetch(baseURL).catch((error) => {console.error(error)});
+    const response = await fetch(baseURL).catch(() => {alert(error)});
 	const htmlString = await response.text();
     const $ = cheerio.load(htmlString);
 
@@ -38,7 +39,7 @@ async function searchSecond(URL) {
     //clean the array
     searchData.splice(0, searchData.length);
     //search and load the html
-    const response = await fetch(URL).catch((error) => {console.error(error)});
+    const response = await fetch(URL).catch(() => {alert(error)});
 	const htmlString = await response.text();
     const $ = cheerio.load(htmlString);
 
