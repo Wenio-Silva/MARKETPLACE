@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { set } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { homeData } from '../search';
+import { homeData, searchDetails } from '../search';
 
 const screenWidth = Dimensions.get("window").width;
 const numColumns = 2;
@@ -52,7 +52,7 @@ export function HomeScreen({ navigation }) {
                     data={homeData}
                     renderItem={({ item })=>(
                             <View style={styles.grup} >
-                                <TouchableHighlight onPress={()=>console.log(item.link)} 
+                                <TouchableHighlight onPress={() => { searchDetails(item.link), navigation.navigate('Detalhes') }} 
                                     underlayColor="skyblue" style={{ paddingTop: 5 }}>
                                     <View>
                                         <Image style={styles.image} source={{ uri: item.image }} />

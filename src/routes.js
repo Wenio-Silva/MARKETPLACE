@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native';
 //Pages
 import { HomeScreen } from './pages/homeScreen';
 import { SearchScreen } from './pages/searchScreen';
+import { DetailsScreen } from './pages/DetailsScreen';
 import FavoritesScreen from './pages/favoritesScreen';
 import HistoryScreen from './pages/historyScreen';
 //Menu Drawer
@@ -27,11 +28,13 @@ const Drawer = createDrawerNavigator();
 export function MyDrawer() {
     return (
         <Drawer.Navigator drawerStyle={{
-			backgroundColor: '#CBE6EF', opacity: 0.95}} drawerContent={props => <DrawerContent {...props} />} >
+			backgroundColor: '#CBE6EF', opacity: 0.95}} 
+			drawerContent={props => <DrawerContent {...props} />} >
             <Drawer.Screen name="Início" component={HomeScreen} />
             <Drawer.Screen name="Pesquisa" component={SearchScreen} />
             <Drawer.Screen name="Favoritos" component={FavoritesScreen} />
             <Drawer.Screen name="Histórico" component={HistoryScreen} />
+			<Drawer.Screen name="Detalhes" component={DetailsScreen} />
         </Drawer.Navigator>
     );
 }

@@ -3,7 +3,7 @@ import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInp
 import { State, TouchableOpacity } from 'react-native-gesture-handler';
 import { call } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { searchData, handle } from '../search';
+import { searchData, handle, searchDetails } from '../search';
 
 const screenWidth = Dimensions.get("window").width;
 const numColumns = 2;
@@ -27,10 +27,8 @@ export function SearchScreen({ navigation }) {
     function wayRefresh() {
         if(searchData.length==0){
             setTimeout(()=>{wayRefresh()}, 500);
-            console.log("bagui ta lokão")
         }else if(searchData.length>0){
             handleRefresh();
-            console.log("cabô")
         }
     }
 
@@ -59,7 +57,7 @@ export function SearchScreen({ navigation }) {
                     data={searchData}
                     renderItem={({ item })=>(
                         <View style={styles.grup}>
-                            <TouchableHighlight onPress={()=>console.log(item.link)} 
+                            <TouchableHighlight onPress={()=> { searchDetails(item.link), navigation.navigate('Detalhes') } } 
                                 Color="skyblue" style={{ paddingTop: 5 }}>
                                 <View>
                                     <Image style={styles.image} source={{ uri: item.image }}/>
