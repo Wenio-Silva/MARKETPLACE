@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, AppState } from 'react-native';
+import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { set } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { homeData } from '../search';
@@ -34,12 +34,15 @@ export function HomeScreen({ navigation }) {
     return (
             <View style={styles.container}>
             <View style={styles.header}>
-                <Icon.Button name="bars" style={styles.menu} size={20} color="#000" 
-                    backgroundColor="#00BFFF" onPress={() => { navigation.openDrawer() }}>
-                </Icon.Button>
-                <Text style={styles.logo}>LOGO</Text>
-                <Icon.Button name="search" style={styles.search} size={20} color="#000" 
-                    backgroundColor="#00BFFF" onPress={() => navigation.navigate('Pesquisa')}></Icon.Button>
+                <TouchableOpacity style={styles.menu} 
+                    onPress={() => { navigation.openDrawer() }}>
+                        <Icon name="bars" size={20} color="#000"/>
+                </TouchableOpacity>
+                <Text style={styles.logo} >LOGO</Text>
+                <TouchableOpacity  style={styles.search}   
+                    onPress={() => navigation.navigate('Pesquisa')}>
+                        <Icon name="search" size={20} color="#000" />
+                    </TouchableOpacity>
             </View>
             <View style={styles.grid}>
                 <FlatList 
@@ -48,12 +51,17 @@ export function HomeScreen({ navigation }) {
                     keyExtractor={(obj)=> obj.id}
                     data={homeData}
                     renderItem={({ item })=>(
-                        <View style={styles.grup}>
-                            <Image style={styles.image} source={{ uri: item.image }}/>
-                            <Text style={styles.title}>{item.title.trim()}</Text>
-                            <Text style={styles.price}>{item.price.trim()}</Text>
-                            <Text style={styles.installment}>{item.installment.trim()}</Text>
-                        </View>
+                            <View style={styles.grup} >
+                                <TouchableHighlight onPress={()=>console.log(item.link)} 
+                                    underlayColor="skyblue" style={{ paddingTop: 5 }}>
+                                    <View>
+                                        <Image style={styles.image} source={{ uri: item.image }} />
+                                        <Text style={styles.title}>{item.title.trim()}</Text>
+                                        <Text style={styles.price}>{item.price.trim()}</Text>
+                                        <Text style={styles.installment}>{item.installment.trim()}</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
                     )}
                     refreshing={refreshing}
                     onRefresh={handleRefresh}
@@ -77,12 +85,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     menu: {
-        marginLeft: 10
+        marginLeft: 20
     },
     logo: {
     },
     search: {
-        marginRight: 5
+        marginRight: 20
     },
     grid: {
         flex: 1

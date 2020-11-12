@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput } from 'react-native';
-import { State } from 'react-native-gesture-handler';
+import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput, TouchableHighlight } from 'react-native';
+import { State, TouchableOpacity } from 'react-native-gesture-handler';
 import { call } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { searchData, handle } from '../search';
@@ -27,24 +27,29 @@ export function SearchScreen({ navigation }) {
     function wayRefresh() {
         if(searchData.length==0){
             setTimeout(()=>{wayRefresh()}, 500);
+            console.log("bagui ta lokão")
         }else if(searchData.length>0){
             handleRefresh();
+            console.log("cabô")
         }
     }
 
     return (
             <View style={styles.container}>
             <View style={styles.header}>
-                <Icon.Button name="reply" style={styles.menu} size={20} color="#000" 
-                    backgroundColor="#00BFFF" onPress={() => navigation.goBack()}>
-                </Icon.Button>
+                <TouchableOpacity  style={styles.menu}   
+                    onPress={() => navigation.goBack()}>
+                        <Icon name="reply" size={20} color="#000" />
+                </TouchableOpacity>
                 <TextInput
                     style={{ height: 20, width: 200, backgroundColor: '#FFF', borderRadius: 10 }}
                     onChangeText={(value) => setValue(value)}
                     placeholder={'  Pesquisar... '}
                 />
-                <Icon.Button name="search" style={styles.search} size={20} color="#000" 
-                    backgroundColor="#00BFFF" onPress={() => { handle(value), wayRefresh()} }></Icon.Button>
+                <TouchableOpacity  style={styles.search} 
+                    onPress={() => { handle(value), wayRefresh()} }>
+                        <Icon name="search" size={20} color="#000" />
+                    </TouchableOpacity>
             </View>
             <View style={styles.grid}>
                 <FlatList 
@@ -54,10 +59,15 @@ export function SearchScreen({ navigation }) {
                     data={searchData}
                     renderItem={({ item })=>(
                         <View style={styles.grup}>
-                            <Image style={styles.image} source={{ uri: item.image }}/>
-                            <Text style={styles.title}>{item.title.trim()}</Text>
-                            <Text style={styles.price}>{item.price.trim()}</Text>
-                            <Text style={styles.installment}>{item.installment.trim()}</Text>
+                            <TouchableHighlight onPress={()=>console.log(item.link)} 
+                                Color="skyblue" style={{ paddingTop: 5 }}>
+                                <View>
+                                    <Image style={styles.image} source={{ uri: item.image }}/>
+                                    <Text style={styles.title}>{item.title.trim()}</Text>
+                                    <Text style={styles.price}>{item.price.trim()}</Text>
+                                    <Text style={styles.installment}>{item.installment.trim()}</Text>
+                                </View>
+                            </TouchableHighlight>
                         </View>
                     )}
                     refreshing={refreshing}
