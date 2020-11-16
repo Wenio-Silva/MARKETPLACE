@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { set } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { homeData, searchDetails } from '../search';
+import { homeData } from '../searchs/srcHome';
+import { searchDetailsMean } from '../searchs/srcDetails';
 
 const screenWidth = Dimensions.get("window").width;
 const numColumns = 2;
@@ -52,7 +53,7 @@ export function HomeScreen({ navigation }) {
                     data={homeData}
                     renderItem={({ item })=>(
                             <View style={styles.grup} >
-                                <TouchableHighlight onPress={() => { searchDetails(item.link), navigation.navigate('Detalhes') }} 
+                                <TouchableHighlight onPress={() => { searchDetailsMean(item.link), navigation.navigate('Detalhes') }} 
                                     underlayColor="skyblue" style={{ paddingTop: 5 }}>
                                     <View>
                                         <Image style={styles.image} source={{ uri: item.image }} />

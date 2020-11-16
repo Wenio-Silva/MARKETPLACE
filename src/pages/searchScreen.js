@@ -3,7 +3,8 @@ import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInp
 import { State, TouchableOpacity } from 'react-native-gesture-handler';
 import { call } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { searchData, handle, searchDetails } from '../search';
+import { searchData, handle } from '../searchs/srcSrcScreen';
+import { searchDetailsMean } from '../searchs/srcDetails';
 
 const screenWidth = Dimensions.get("window").width;
 const numColumns = 2;
@@ -57,7 +58,7 @@ export function SearchScreen({ navigation }) {
                     data={searchData}
                     renderItem={({ item })=>(
                         <View style={styles.grup}>
-                            <TouchableHighlight onPress={()=> { searchDetails(item.link), navigation.navigate('Detalhes') } } 
+                            <TouchableHighlight onPress={()=> { searchDetailsMean(item.link), navigation.navigate('Detalhes') } } 
                                 Color="skyblue" style={{ paddingTop: 5 }}>
                                 <View>
                                     <Image style={styles.image} source={{ uri: item.image }}/>
