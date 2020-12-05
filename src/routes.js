@@ -34,7 +34,7 @@ export function MyDrawer() {
             <Drawer.Screen name="Pesquisa" component={SearchScreen} />
             <Drawer.Screen name="Favoritos" component={FavoritesScreen} />
             <Drawer.Screen name="Histórico" component={HistoryScreen} />
-			<Drawer.Screen name="Detalhes" component={DetailsScreen} />
+			      <Drawer.Screen name="Detalhes" component={DetailsScreen} />
         </Drawer.Navigator>
     );
 }

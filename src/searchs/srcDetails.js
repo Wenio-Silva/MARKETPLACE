@@ -2,24 +2,38 @@ import React from 'react';
 const cheerio = require('react-native-cheerio');
 const error = "Verifique sua conexão com a internet e tente novamente! ;-)"
 export let detailsDataMean = [], detailsDataImgs = [], detailsDataInfo = [];
-//For all functions get the html 
-let html = "";
-//DetailsPage's products
 
+let DetailsDataBase = {
+    "delivered": "SrBarato",
+    "description": "** **************** ***************** ******************** ********************** *** ************ **********",
+    "imgMean": "https://media.istockphoto.com/vectors/vector-tshirt-design-for-gamers-with-word-gg-it-is-the-abbreviation-vector-id954026166",
+    "installment": "ou em 3x de R$ **,** sem juros",
+    "priceBefore": "*********",
+    "priceNow": "******",
+    "title": "******************",
+};
+detailsDataMean.push(DetailsDataBase);
+
+//For all functions get the html
+let html = "";
 export async function searchDetailsMean(link) {
     //clean the array
     detailsDataMean.splice(0, detailsDataMean.length);
+    //add the data base for the DetailsScreen.js handler it
+    detailsDataMean.push(DetailsDataBase);
     //search and load the html
-    console.log(link);
     const base = "https://www.magazinevoce.com.br";
-    const response = await fetch(base + link).catch(() => {alert(error)});
-	const htmlString = await response.text();
+    const fullLink = base + link;
+    const response = await fetch(fullLink).catch(() => {alert(error)});
+    const htmlString = await response.text();
+    // html to another functions
+    html = htmlString;
     const $ = cheerio.load(htmlString);
-    html = $;
+    //clean the array
+    detailsDataMean.splice(0, detailsDataMean.length);
 
     const title = $('.product > .hide-mobile').text();
-    const imgMean = $('.product > .pgallery > .photo.hide-mobile > img').attr('src');
-
+    const imgMean = $('.product > .pgallery > div.photo.hide-mobile > img').attr('src');
     // prop delivery are incomplete
     const delivered = $('.product > .pdetailpage > .pdetailbox > .product-info-container > .info > .delivered-by-label > .seller').text();
     const priceBefore = $('.product > .pdetailpage > .pdetailbox > .product-info-container > .info > .p-through').text();
@@ -29,28 +43,26 @@ export async function searchDetailsMean(link) {
 
     const description = $('.product > .ptabs > .product-factsheet > .tab-content > .tab-pane.active > .tab.descricao > tbody > .attribute.level1 > td').text();
     
-    const dataTotal = {title, imgMean, delivered, priceBefore, priceNow, installment, description};
+    const dataTotal = {title, imgMean, delivered, priceBefore, priceNow, installment, description, fullLink};
     detailsDataMean.push(dataTotal);
     
-    console.log(detailsDataMean);
+    searchDetailsImgs();
 }
 
-export async function searchDetailsImgs(link) { 
+export async function searchDetailsImgs() { 
     detailsDataImgs.splice(0, detailsDataImgs.length);
     //load the html
-    const $ = html;
+    const $ = cheerio.load(html);
 
     //imgs aren't working
-    let imgs = [];
-    $('.product > .pgallery > .pcarousel > div.jcarousel-container.jcarousel-container-horizontal > jcarousel-clip.jcarousel-clip-horizontal > ul > li').each((i, e)=>{
+    // '.product > .pgallery > .pcarousel > div.jcarousel-container.jcarousel-container-horizontal > jcarousel-clip.jcarousel-clip-horizontal > ul > li'
+    $('.jcarousel-container.jcarousel-container-horizontal > .jcarousel-clip.jcarousel-clip-horizontal > ul > li').each((i, e)=>{
+        const id = i;
         const img = $(e).find('a > img').attr('src');
 
-        imgs.push(img);
+        const data = { id, img };
+        detailsDataImgs.push(data);
     });
-
-    const dataTotal = { imgs };
-    detailsDataImgs.push(dataTotal);
-    
     console.log(detailsDataImgs);
 }
 
@@ -59,7 +71,7 @@ export async function searchDetailsInfo(link) {
     //load the html
     const $ = html;
     
-    const nav_tabs = $('.product > .ptabs > .product-factsheet > .nav nav-tabs > li').each((i, e)=>{
+    const nav_tabs = $('.product > .ptabs > .product-factsheet > .nav.nav-tabs > li').each((i, e)=>{
         const tab = $(e).find('a').text();
     }) 
     const fichatecnica = '';

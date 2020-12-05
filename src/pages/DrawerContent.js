@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     fContent2: {
+        paddingTop: 10,
         flexDirection: 'row',
         alignItems: 'center',
         marginLeft: 80

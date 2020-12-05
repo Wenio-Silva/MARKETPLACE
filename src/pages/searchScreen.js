@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput, TouchableHighlight } from 'react-native';
+import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput, TouchableHighlight, Keyboard } from 'react-native';
 import { State, TouchableOpacity } from 'react-native-gesture-handler';
 import { call } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,63 +17,72 @@ const barHeight = StatusBar.currentHeight;
 export function SearchScreen({ navigation }) {
     const [value, setValue] = useState(' ');
     const [refreshing, setRefresh] = useState(false);
-
+    //Mean function of refresh
     function handleRefresh() {
         setRefresh(true);
-        // console.log("true");
         setTimeout(()=>{ setRefresh(false) }, 2000);
-        // console.log("false");
-    }
-
+    };
+    //second function of refresh
     function wayRefresh() {
         if(searchData.length==0){
             setTimeout(()=>{wayRefresh()}, 500);
         }else if(searchData.length>0){
             handleRefresh();
         }
-    }
+    };
+    //Handle keyboard
+    // function handleKeyDown(e) {
+    //     if(e.nativeEvent.key == "Enter"){
+    //         dismissKeyboard();
+    //         handle(value);
+    //         wayRefresh();
+    //     }
+    // }
 
     return (
             <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity  style={styles.menu}   
-                    onPress={() => navigation.goBack()}>
-                        <Icon name="reply" size={20} color="#000" />
-                </TouchableOpacity>
-                <TextInput
-                    style={{ height: 20, width: 200, backgroundColor: '#FFF', borderRadius: 10 }}
-                    onChangeText={(value) => setValue(value)}
-                    placeholder={'  Pesquisar... '}
-                />
-                <TouchableOpacity  style={styles.search} 
-                    onPress={() => { handle(value), wayRefresh()} }>
-                        <Icon name="search" size={20} color="#000" />
+                <View style={styles.header}>
+                    <TouchableOpacity  style={styles.menu}   
+                        onPress={() => navigation.goBack()}>
+                            <Icon name="reply" size={20} color="#000" />
                     </TouchableOpacity>
+                    <TextInput
+                        style={{ height: 20, width: 200, backgroundColor: '#FFF', borderRadius: 10 }}
+                        onChangeText={(value) => setValue(value)}
+                        placeholder={'  Pesquisar... '}
+                        // onKeyPress={handleKeyDown}
+                        autoCapitalize="sentences"
+                        autoCorrect={true}
+                    />
+                    <TouchableOpacity  style={styles.search} 
+                        onPress={() => { handle(value), wayRefresh()} }>
+                            <Icon name="search" size={20} color="#000" />
+                        </TouchableOpacity>
+                </View>
+                <View style={styles.grid}>
+                    <FlatList 
+                        numColumns={numColumns}
+                        style={styles.list}
+                        keyExtractor={(obj)=> obj.id}
+                        data={searchData}
+                        renderItem={({ item })=>(
+                            <View style={styles.grup}>
+                                <TouchableHighlight onPress={()=> { searchDetailsMean(item.link), navigation.navigate('Detalhes') } } 
+                                    Color="skyblue" style={{ paddingTop: 5 }}>
+                                    <View>
+                                        <Image style={styles.image} source={{ uri: item.image }}/>
+                                        <Text style={styles.title}>{item.title.trim()}</Text>
+                                        <Text style={styles.price}>{item.price.trim()}</Text>
+                                        <Text style={styles.installment}>{item.installment.trim()}</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                        )}
+                        refreshing={refreshing}
+                        onRefresh={handleRefresh}
+                    />
+                </View>
             </View>
-            <View style={styles.grid}>
-                <FlatList 
-                    numColumns={numColumns}
-                    style={styles.list}
-                    keyExtractor={(obj)=> obj.id}
-                    data={searchData}
-                    renderItem={({ item })=>(
-                        <View style={styles.grup}>
-                            <TouchableHighlight onPress={()=> { searchDetailsMean(item.link), navigation.navigate('Detalhes') } } 
-                                Color="skyblue" style={{ paddingTop: 5 }}>
-                                <View>
-                                    <Image style={styles.image} source={{ uri: item.image }}/>
-                                    <Text style={styles.title}>{item.title.trim()}</Text>
-                                    <Text style={styles.price}>{item.price.trim()}</Text>
-                                    <Text style={styles.installment}>{item.installment.trim()}</Text>
-                                </View>
-                            </TouchableHighlight>
-                        </View>
-                    )}
-                    refreshing={refreshing}
-                    onRefresh={handleRefresh}
-                />
-            </View>
-        </View>
     );
   }
 

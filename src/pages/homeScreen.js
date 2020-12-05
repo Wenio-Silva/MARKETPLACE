@@ -34,41 +34,41 @@ export function HomeScreen({ navigation }) {
 
     return (
             <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.menu} 
-                    onPress={() => { navigation.openDrawer() }}>
-                        <Icon name="bars" size={20} color="#000"/>
-                </TouchableOpacity>
-                <Text style={styles.logo} >LOGO</Text>
-                <TouchableOpacity  style={styles.search}   
-                    onPress={() => navigation.navigate('Pesquisa')}>
-                        <Icon name="search" size={20} color="#000" />
+                <View style={styles.header}>
+                    <TouchableOpacity style={styles.menu} 
+                        onPress={() => { navigation.openDrawer() }}>
+                            <Icon name="bars" size={20} color="#000"/>
                     </TouchableOpacity>
+                    <Text style={styles.logo} >LOGO</Text>
+                    <TouchableOpacity  style={styles.search}   
+                        onPress={() => navigation.navigate('Pesquisa')}>
+                            <Icon name="search" size={20} color="#000" />
+                        </TouchableOpacity>
+                </View>
+                <View style={styles.grid}>
+                    <FlatList 
+                        numColumns={numColumns}
+                        style={styles.list}
+                        keyExtractor={(obj)=> obj.id}
+                        data={homeData}
+                        renderItem={({ item })=>(
+                                <View style={styles.grup} >
+                                    <TouchableHighlight onPress={() => { searchDetailsMean(item.link), navigation.navigate('Detalhes') }} 
+                                        underlayColor="skyblue" style={{ paddingTop: 5 }}>
+                                        <View>
+                                            <Image style={styles.image} source={{ uri: item.image }} />
+                                            <Text style={styles.title}>{item.title.trim()}</Text>
+                                            <Text style={styles.price}>{item.price.trim()}</Text>
+                                            <Text style={styles.installment}>{item.installment.trim()}</Text>
+                                        </View>
+                                    </TouchableHighlight>
+                                </View>
+                        )}
+                        refreshing={refreshing}
+                        onRefresh={handleRefresh}
+                    />
+                </View>
             </View>
-            <View style={styles.grid}>
-                <FlatList 
-                    numColumns={numColumns}
-                    style={styles.list}
-                    keyExtractor={(obj)=> obj.id}
-                    data={homeData}
-                    renderItem={({ item })=>(
-                            <View style={styles.grup} >
-                                <TouchableHighlight onPress={() => { searchDetailsMean(item.link), navigation.navigate('Detalhes') }} 
-                                    underlayColor="skyblue" style={{ paddingTop: 5 }}>
-                                    <View>
-                                        <Image style={styles.image} source={{ uri: item.image }} />
-                                        <Text style={styles.title}>{item.title.trim()}</Text>
-                                        <Text style={styles.price}>{item.price.trim()}</Text>
-                                        <Text style={styles.installment}>{item.installment.trim()}</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                    )}
-                    refreshing={refreshing}
-                    onRefresh={handleRefresh}
-                />
-            </View>
-        </View>
     );
   }
 
