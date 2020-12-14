@@ -21,7 +21,7 @@ export async function searchMain() {
         const image = $(e).find('.g-img-wrapper > img').attr("data-original");
         const price = $(e).find('.g-desc > .g-price').text();
         const installment = $(e).find('.g-desc > .g-installment').text();
-        const link = $(e).find('.g-img-wrapper').attr("href");
+        const link = "https://www.magazinevoce.com.br" + $(e).find('.g-img-wrapper').attr("href");
 
         const data = {id, title, image, price, installment, link};
         homeData.push(data);

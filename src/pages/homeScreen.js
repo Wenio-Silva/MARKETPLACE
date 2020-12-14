@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableHighlight, TouchableOpacity } from 'react-native';
-import { set } from 'react-native-reanimated';
+import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TouchableHighlight, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { homeData } from '../searchs/srcHome';
-import { searchDetailsMean } from '../searchs/srcDetails';
+import { handlerURI } from './DetailsScreen';
 
 const screenWidth = Dimensions.get("window").width;
 const numColumns = 2;
@@ -14,6 +13,7 @@ const tileSize = tSize / numColumns;
 const barHeight = StatusBar.currentHeight;
 
 export function HomeScreen({ navigation }) {
+    const [loading, setLoading] = useState(false);
     const [refreshing, setRefresh] = useState(false);
 
     function handleRefresh() {
@@ -26,12 +26,31 @@ export function HomeScreen({ navigation }) {
             setTimeout(()=>{wayRefresh()}, 500);
         }else if(homeData.length>0){
             handleRefresh();
+            setLoading(false);
+        }
+    }
+
+    function LoadingSymbol() {
+        if(loading==false) {
+            setLoading(true)
         }
     }
     if(homeData.length==0){
         wayRefresh();
+        LoadingSymbol();
     }
-
+    // function renderLoading
+    function RenderLoading() {
+        if(loading==true) {
+            return (
+                <ActivityIndicator size="large" color="#555" />
+            )
+        }else{
+            return (
+                <Text style={styles.logo} >LOGO</Text>
+            )
+        }
+    }
     return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -39,7 +58,7 @@ export function HomeScreen({ navigation }) {
                         onPress={() => { navigation.openDrawer() }}>
                             <Icon name="bars" size={20} color="#000"/>
                     </TouchableOpacity>
-                    <Text style={styles.logo} >LOGO</Text>
+                    <RenderLoading />
                     <TouchableOpacity  style={styles.search}   
                         onPress={() => navigation.navigate('Pesquisa')}>
                             <Icon name="search" size={20} color="#000" />
@@ -53,7 +72,7 @@ export function HomeScreen({ navigation }) {
                         data={homeData}
                         renderItem={({ item })=>(
                                 <View style={styles.grup} >
-                                    <TouchableHighlight onPress={() => { searchDetailsMean(item.link), navigation.navigate('Detalhes') }} 
+                                    <TouchableHighlight onPress={() => { handlerURI(item.link), navigation.navigate('Detalhes') }} 
                                         underlayColor="skyblue" style={{ paddingTop: 5 }}>
                                         <View>
                                             <Image style={styles.image} source={{ uri: item.image }} />

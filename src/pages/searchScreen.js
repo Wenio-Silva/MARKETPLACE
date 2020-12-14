@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import { FlatList, View, Text, Image, StyleSheet, Dimensions, StatusBar, TextInput, TouchableHighlight, Keyboard } from 'react-native';
+import { View, Text, Image, FlatList, TextInput, TouchableHighlight, Dimensions, StatusBar, Keyboard, ActivityIndicator, Vibration, StyleSheet } from 'react-native';
 import { State, TouchableOpacity } from 'react-native-gesture-handler';
 import { call } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { searchData, handle } from '../searchs/srcSrcScreen';
-import { searchDetailsMean } from '../searchs/srcDetails';
+import { handlerURI } from './DetailsScreen';
 
 const screenWidth = Dimensions.get("window").width;
 const numColumns = 2;
@@ -16,6 +16,7 @@ const barHeight = StatusBar.currentHeight;
 
 export function SearchScreen({ navigation }) {
     const [value, setValue] = useState(' ');
+    const [loading, setLoading] = useState(false);
     const [refreshing, setRefresh] = useState(false);
     //Mean function of refresh
     function handleRefresh() {
@@ -28,16 +29,23 @@ export function SearchScreen({ navigation }) {
             setTimeout(()=>{wayRefresh()}, 500);
         }else if(searchData.length>0){
             handleRefresh();
+            setLoading(false);
         }
     };
-    //Handle keyboard
-    // function handleKeyDown(e) {
-    //     if(e.nativeEvent.key == "Enter"){
-    //         dismissKeyboard();
-    //         handle(value);
-    //         wayRefresh();
-    //     }
-    // }
+    //Loading and text input function
+    function Load() {
+        if(loading==false) {
+            return(
+                <View style={{ height: 0 }}></View>
+            )
+        } else {
+            return(
+                <View style={{ height: 40, paddingTop: 10 }}>
+                    <ActivityIndicator size="large" color="#555" />
+                </View>
+            )
+        }
+    }
 
     return (
             <View style={styles.container}>
@@ -50,15 +58,16 @@ export function SearchScreen({ navigation }) {
                         style={{ height: 20, width: 200, backgroundColor: '#FFF', borderRadius: 10 }}
                         onChangeText={(value) => setValue(value)}
                         placeholder={'  Pesquisar... '}
-                        // onKeyPress={handleKeyDown}
+                        returnKeyType="go"
                         autoCapitalize="sentences"
                         autoCorrect={true}
                     />
                     <TouchableOpacity  style={styles.search} 
-                        onPress={() => { handle(value), wayRefresh()} }>
+                        onPress={() => { handle(value), wayRefresh(), setLoading(true), Keyboard.dismiss() } }>
                             <Icon name="search" size={20} color="#000" />
                         </TouchableOpacity>
                 </View>
+                <Load />
                 <View style={styles.grid}>
                     <FlatList 
                         numColumns={numColumns}
@@ -67,7 +76,7 @@ export function SearchScreen({ navigation }) {
                         data={searchData}
                         renderItem={({ item })=>(
                             <View style={styles.grup}>
-                                <TouchableHighlight onPress={()=> { searchDetailsMean(item.link), navigation.navigate('Detalhes') } } 
+                                <TouchableHighlight onPress={()=> { handlerURI(item.link), navigation.navigate('Detalhes') } } 
                                     Color="skyblue" style={{ paddingTop: 5 }}>
                                     <View>
                                         <Image style={styles.image} source={{ uri: item.image }}/>
